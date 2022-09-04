@@ -1,14 +1,23 @@
 <?php
 session_start();
-//※htdocsと同じ階層に「includes」を作成してfuncs.phpを入れましょう！
-//include "../../includes/funcs.php";
-include "funcs.php";
+include("funcs.php");
 sschk();
+$id = filter_input( INPUT_GET, "id" );
 $pdo = db_conn();
 
+
+//２．データ登録SQL作成
 $stmt = $pdo->prepare("SELECT * FROM gs_user_table WHERE id=:id");
 $stmt->bindValue(":id",$id,PDO::PARAM_INT);
 $status = $stmt->execute();
+
+//３．データ表示
+$view="";
+if($status==false) {
+    sql_error($stmt);
+}else{
+    $row = $stmt->fetch();
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,20 +25,21 @@ $status = $stmt->execute();
 <head>
   <meta charset="UTF-8">
   <title>USERデータ登録</title>
-  <link href="css/bootstrap.min4.css" rel="stylesheet">
+  <link href="css/bootstrap.min3.css" rel="stylesheet">
   <style>div{padding: 10px;font-size:16px;}</style>
 </head>
 <body>
 
 <!-- Head[Start] -->
 <header>
-    <?php echo $_SESSION["name"]; ?>さん　
+    <?php echo $_SESSION["name"]; ?>さん
+    <?php echo $_SESSION["user_id"]; ?>　　
     <?php include("menu.php"); ?>
 </header>
 <!-- Head[End] -->
 
 <!-- Main[Start] -->
-<form method="post" action="user_update.php">
+<form method="POST" action="user_update.php">
   <div class="jumbotron">
    <fieldset>
     <legend>My Profile</legend>

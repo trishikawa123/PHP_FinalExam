@@ -33,7 +33,7 @@ $url = 'create_qr.php?data='.$_GET['data'];
 <head>
   <meta charset="UTF-8">
   <title>データ更新</title>
-  <link href="css/bootstrap.min4.css" rel="stylesheet">
+  <link href="css/bootstrap.min3.css" rel="stylesheet">
   <style>div{padding: 10px;font-size:16px;}</style>
 </head>
 <body>

@@ -2,55 +2,41 @@
 //$_SESSION使うよ！
 session_start();
 
-$pdo = db_conn();
-
-//※htdocsと同じ階層に「includes」を作成してfuncs.phpを入れましょう！
-//include "../../includes/funcs.php";
-include "funcs.php";
-sschk();
 
 //1.POSTデータ取得
-$name      = filter_input( INPUT_POST, "name" );
-$email      = filter_input( INPUT_POST, "email" );
-$address      = filter_input( INPUT_POST, "address" );
-$bday      = filter_input( INPUT_POST, "bday" );
-$lid       = filter_input( INPUT_POST, "lid" );
-$lpw       = filter_input( INPUT_POST, "lpw" );
-$kanri_flg = filter_input( INPUT_POST, "kanri_flg" );
-$life_flg  = filter_input( INPUT_POST, "life_flg" );
-$points = filter_input( INPUT_POST, "points" );
-$reward = filter_input( INPUT_POST, "reward" );
-$id        = filter_input( INPUT_POST, "id" );
+$name  = $_POST["name"];
+$email = $_POST["email"];
+$address    = $_POST["address"];
+$bday    = $_POST["bday"];
+$lid    = $_POST["lid"];
+$lpw    = $_POST["lpw"];
+// $kanri_flg    = $_POST["kanri_flg"];
+// $life_flg    = $_POST["life_flg"];
+// $points    = $_POST["points"];
+// $reward    = $_POST["reward"];
+// $id     = $_POST["id"];
+
 
 //2.DB接続します
-// $pdo = db_conn();
+include("funcs.php");  //funcs.phpを読み込む（関数群）
+sschk();
+$pdo = db_conn();
 
 //3.データ登録SQL作成
-if($lpw==""){
-    $sql = "UPDATE gs_user_table SET name=:name,email=:email,address=:address,bday=:bday,lid=:lid,kanri_flg=:kanri_flg,life_flg=:life_flg,points=:points,reward=:reward,WHERE id=:id";
-}else{
-    $sql = "UPDATE gs_user_table SET name=:name,lid=:lid,lpw=:lpw,kanri_flg=:kanri_flg,life_flg=:life_flg WHERE id=:id";
-}
-//4.SQL
-$stmt = $pdo->prepare($sql);
-//5.Bind変数へ代入
-if($lpw!=""){
-    $stmt->bindValue(':lpw', password_hash($lpw, PASSWORD_DEFAULT), PDO::PARAM_STR);
-}
+$stmt = $pdo->prepare("UPDATE gs_user_table SET name=:name,email=:email,address=:address,bday=:bday,lid=:lid,lpw=:lpw,WHERE id=:id");
 $stmt->bindValue(':name', $name, PDO::PARAM_STR); //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':email', $email, PDO::PARAM_STR);
 $stmt->bindValue(':address', $address, PDO::PARAM_STR);
 $stmt->bindValue(':bday', $bday, PDO::PARAM_STR);
 $stmt->bindValue(':lid', $lid, PDO::PARAM_STR);
-$stmt->bindValue(':kanri_flg', $kanri_flg, PDO::PARAM_INT); 
-$stmt->bindValue(':life_flg', $life_flg, PDO::PARAM_INT); 
-$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->bindValue(':lpw', $lpw, PDO::PARAM_STR);
+// $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $status = $stmt->execute();
 
 //6.データ登録処理後
-if ($status == false) {
+if($status==false){
     sql_error($stmt);
-} else {
-    header("Location: home.php");
-    exit;
-}
+  }else{
+    redirect("home.php");
+  }
+  ?>
