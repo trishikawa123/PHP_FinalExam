@@ -38,9 +38,9 @@ if($status==false) {
 <form method="POST" action="reward_update.php">
   <div class="jumbotron">
    <fieldset>
-    <legend>[編集]</legend>
+    <legend>REWARDS</legend>
      <label>特典名：<input type="text" name="reward" value="<?=$row["reward"]?>"></label><br>
-     <label>必要ポイント：<input type="integer" name="points" value="<?=$row["points"]?>"></label><br>
+     <label>必要ポイント：<input type="integer" name="points" value="<?=-$row["points"]?>"></label><br>
      <input type="submit" value="送信">
      <input type="hidden" name="id" value="<?=$id?>">
     </fieldset>

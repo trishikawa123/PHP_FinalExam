@@ -4,9 +4,18 @@ include("funcs.php");
 sschk();
 $pdo = db_conn();
 
+$name = $_SESSION["name"];
+$user_id = $_SESSION["user_id"];
+
+
 //２．データ登録SQL作成
 $stmt = $pdo->prepare("SELECT * FROM reward_table");
 $status = $stmt->execute();
+
+$stmt_point = $pdo->prepare("SELECT SUM(points) FROM user_event WHERE user_id='$user_id'");
+$status_point = $stmt_point->execute();
+
+$val = $stmt_point -> fetch();
 
 //３．データ表示
 $view="";
@@ -14,17 +23,16 @@ if($status==false) {
   sql_error($stmt);
 }else{
   while( $r = $stmt->fetch(PDO::FETCH_ASSOC)){ 
-    $view .= '<p>';
-    $view .= '<img src="upload/'.$r["img"].'" width="200">';
-    $view .= '<a href="reward_detail.php?id='.$r["id"].'">';
-    $view .= $r["id"]."|".$r["reward"]."|".$r["points"];
-    $view .= '</a>';
-    $view .= "　";
-    if($_SESSION["kanri_flg"]=="1"){
-      $view .= '<a class="btn btn-danger" href="delete.php?id='.$r["id"].'">';
-      $view .= '[<i class="glyphicon glyphicon-remove"></i>削除]';
+    if($val[0] > $r["points"]){
+      $view .= '<p>';
+      $view .= '<img src="upload/'.$r["img"].'" width="200">';
+      $view .= '<a href="reward_detail.php?id='.$r["id"].'">';
+      $view .= $r["id"]."|".$r["reward"]."|".$r["points"];
       $view .= '</a>';
+      $view .= "　";
+
     }
+
     $view .= '</p>';
   }
 }
@@ -49,6 +57,7 @@ if($status==false) {
 
 <!-- Main[Start] -->
 <div>
+<legend>REWARDS</legend>
   <div>
     <input type="text" id="keyword">
     <button id="send">検索</button>

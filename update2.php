@@ -1,7 +1,8 @@
 <?php
 session_start();
+include("funcs.php");  //funcs.phpを読み込む（関数群）
 sschk();
-$pdo = db_conn();
+
 
 //1. POSTデータ取得
 $category  = $_POST["category"];
@@ -11,15 +12,14 @@ $location = $_POST["location"];
 $points = $_POST["points"];
 $datetime   = $_POST["datetime"];
 $id    = $_POST["id"];   //idを取得
+$user_id = $_SESSION["user_id"];
 
 //2. DB接続します
-include("funcs.php");  //funcs.phpを読み込む（関数群）
 $pdo = db_conn();      //DB接続関数
 
 
 //３．データ登録SQL作成
-$stmt = $pdo->prepare("INSERT INTO user_event( points )VALUES(:points)");
-$stmt->bindValue(':points',  $points,   PDO::PARAM_INT);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt = $pdo->prepare("INSERT INTO user_event( points,user_id )VALUES($points,$user_id)");
 
 // $stmt = $pdo->prepare ("SELECT * FROM gs_user_table INNERJOIN user_event ON gs_user_table.id = user_event.user_id where user_event.user_id=?");
 
@@ -31,6 +31,6 @@ $status = $stmt->execute(); //実行
 if($status==false){
     sql_error($stmt);
 }else{
-    redirect("update3.php");
+    redirect("home.php");
 }
 ?>

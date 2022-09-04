@@ -11,10 +11,15 @@ sschk();
 
 //1.POSTデータ取得
 $name      = filter_input( INPUT_POST, "name" );
+$email      = filter_input( INPUT_POST, "email" );
+$address      = filter_input( INPUT_POST, "address" );
+$bday      = filter_input( INPUT_POST, "bday" );
 $lid       = filter_input( INPUT_POST, "lid" );
 $lpw       = filter_input( INPUT_POST, "lpw" );
 $kanri_flg = filter_input( INPUT_POST, "kanri_flg" );
 $life_flg  = filter_input( INPUT_POST, "life_flg" );
+$points = filter_input( INPUT_POST, "points" );
+$reward = filter_input( INPUT_POST, "reward" );
 $id        = filter_input( INPUT_POST, "id" );
 
 //2.DB接続します
@@ -22,7 +27,7 @@ $id        = filter_input( INPUT_POST, "id" );
 
 //3.データ登録SQL作成
 if($lpw==""){
-    $sql = "UPDATE gs_user_table SET name=:name,lid=:lid,kanri_flg=:kanri_flg,life_flg=:life_flg WHERE id=:id";
+    $sql = "UPDATE gs_user_table SET name=:name,email=:email,address=:address,bday=:bday,lid=:lid,kanri_flg=:kanri_flg,life_flg=:life_flg,points=:points,reward=:reward,WHERE id=:id";
 }else{
     $sql = "UPDATE gs_user_table SET name=:name,lid=:lid,lpw=:lpw,kanri_flg=:kanri_flg,life_flg=:life_flg WHERE id=:id";
 }
@@ -33,6 +38,9 @@ if($lpw!=""){
     $stmt->bindValue(':lpw', password_hash($lpw, PASSWORD_DEFAULT), PDO::PARAM_STR);
 }
 $stmt->bindValue(':name', $name, PDO::PARAM_STR); //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':address', $address, PDO::PARAM_STR);
+$stmt->bindValue(':bday', $bday, PDO::PARAM_STR);
 $stmt->bindValue(':lid', $lid, PDO::PARAM_STR);
 $stmt->bindValue(':kanri_flg', $kanri_flg, PDO::PARAM_INT); 
 $stmt->bindValue(':life_flg', $life_flg, PDO::PARAM_INT); 
@@ -43,6 +51,6 @@ $status = $stmt->execute();
 if ($status == false) {
     sql_error($stmt);
 } else {
-    header("Location: user_select.php");
+    header("Location: home.php");
     exit;
 }

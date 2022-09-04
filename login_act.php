@@ -27,6 +27,7 @@ if( password_verify($_POST["lpw"] ,$val["lpw"])){
   $_SESSION["chk_ssid"]  = session_id();
   $_SESSION["kanri_flg"] = $val['kanri_flg'];
   $_SESSION["name"]      = $val['name'];
+  $_SESSION["user_id"]      = $val['id'];
   redirect("home.php");
 }else{
   //Login失敗時(Logout経由)

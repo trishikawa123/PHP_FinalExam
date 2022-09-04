@@ -29,12 +29,14 @@ $status = $stmt->execute();
 <!-- Head[End] -->
 
 <!-- Main[Start] -->
-<form method="post" action="user_insert.php">
+<form method="post" action="user_update.php">
   <div class="jumbotron">
    <fieldset>
     <legend>My Profile</legend>
      <label>名前：<input type="text" name="name" value="<?=$row["name"]?>"></label><br>
      <br>
+     <!-- <label>チーム：<input type="text" name="team" value="<?=$row["team"]?>"></label><br>
+     <br> -->
      <label>email：<input type="text" name="email" value="<?=$row["email"]?>"></label><br>
      <br>
      <label>住所：<input type="text" name="address" value="<?=$row["address"]?>"></label><br>
